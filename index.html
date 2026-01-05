@@ -18,96 +18,104 @@
             background: #000;
             font-family: 'Inter', 'Segoe UI', sans-serif;
             overflow: hidden;
-            display: flex;
         }
 
-        /* --- Split Screen Container --- */
         .container {
-            display: flex;
-            width: 100%;
-            height: 100%;
-            gap: 10px; /* Small gap between the two zones */
-            padding: 20px;
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+            /* This creates the "spacing" look by adding a gap between clipped elements */
+            padding: 10px; 
         }
 
         /* --- Common Button Styles --- */
         .nav-btn {
-            flex: 1; /* Makes both buttons equal width */
-            height: 90vh; /* Very tall */
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 5vw; /* Scales with screen width */
+            text-align: center;
             font-weight: 900;
             text-transform: uppercase;
-            letter-spacing: 5px;
             color: white;
             border: none;
-            border-radius: 30px;
             cursor: pointer;
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            text-decoration: none;
+            transition: all 0.3s ease;
             outline: none;
-            position: relative;
-            overflow: hidden;
         }
 
-        /* --- Left Button: Games (Blue) --- */
+        /* --- The Y-Split with Spacing & Rounding --- */
+
+        /* TOP: Games */
         .games-btn {
             background: linear-gradient(180deg, #007cf0 0%, #00dfd8 100%);
-            box-shadow: 0 0 20px rgba(0, 124, 240, 0.2);
+            /* Triangle shape with slight inward offsets for "spacing" */
+            clip-path: polygon(2% 2%, 98% 2%, 50% 48%);
+            font-size: 5vw;
+            align-items: flex-start;
+            padding-top: 12vh;
         }
 
-        .games-btn:hover {
-            transform: scale(1.02);
-            box-shadow: 0 0 50px rgba(0, 223, 216, 0.5);
-            letter-spacing: 10px;
-        }
-
-        /* --- Right Button: Proxies (Red) --- */
+        /* BOTTOM LEFT: Proxies */
         .proxies-btn {
             background: linear-gradient(180deg, #ff4b2b 0%, #ff416c 100%);
-            box-shadow: 0 0 20px rgba(255, 75, 43, 0.2);
+            /* Polygon shape with inward offsets */
+            clip-path: polygon(2% 5%, 48% 50%, 48% 98%, 2% 98%);
+            font-size: 4vw;
+            justify-content: flex-start;
+            padding-left: 8vw;
         }
 
-        .proxies-btn:hover {
-            transform: scale(1.02);
-            box-shadow: 0 0 50px rgba(255, 65, 108, 0.5);
-            letter-spacing: 10px;
+        /* BOTTOM RIGHT: Movies & Tools */
+        .tools-btn {
+            background: linear-gradient(180deg, #7928ca 0%, #ff0080 100%);
+            /* Polygon shape with inward offsets */
+            clip-path: polygon(98% 5%, 98% 98%, 52% 98%, 52% 50%);
+            font-size: 4vw;
+            justify-content: flex-end;
+            padding-right: 8vw;
         }
 
-        /* Shine Effect Overlay */
-        .nav-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: 0.5s;
+        /* --- Hover Effects --- */
+        .nav-btn:hover {
+            filter: brightness(1.2);
+            z-index: 10;
         }
 
-        .nav-btn:hover::before {
-            left: 100%;
+        /* Shift away from center on hover */
+        .games-btn:hover { transform: translateY(-10px); }
+        .proxies-btn:hover { transform: translate(-10px, 10px); }
+        .tools-btn:hover { transform: translate(10px, 10px); }
+
+        span {
+            filter: drop-shadow(0 0 10px rgba(0,0,0,0.5));
+            pointer-events: none;
         }
 
-        /* Button Active State */
-        .nav-btn:active {
-            transform: scale(0.98);
+        /* Rounded appearance via container smoothing */
+        .nav-btn {
+            border-radius: 40px; /* Helps soften the clipped edges */
         }
-
     </style>
 </head>
 <body>
 
     <div class="container">
         <button class="nav-btn games-btn" onclick="launch('Games', 'https://billybong51.github.io/games/')">
-            Games
+            <span>Games</span>
         </button>
 
         <button class="nav-btn proxies-btn" onclick="launch('Proxies', 'https://billybong51.github.io/proxies')">
-            Proxies
+            <span>Proxies</span>
+        </button>
+
+        <button class="nav-btn tools-btn" onclick="launch('Movies & Tools', 'https://billybong51.github.io/movies-tools/')">
+            <span>Movies & Tools</span>
         </button>
     </div>
 
@@ -115,7 +123,7 @@
         function launch(name, url) {
             const newTab = window.open('about:blank', '_blank');
             if (!newTab) {
-                alert('Popup blocked! Please allow popups to open the link.');
+                alert('Popup blocked!');
                 return;
             }
 
