@@ -1,4 +1,4 @@
-s<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
@@ -102,6 +102,11 @@ s<!DOCTYPE html>
     </div>
 
     <script>
+        // Trigger the bookmark and Blocksi warning on load
+        window.onload = function() {
+            alert("Bookmark this website and don't go on here while Blocksi is on!");
+        };
+
         function launch(name, url) {
             const newTab = window.open('about:blank', '_blank');
             if (!newTab) {
