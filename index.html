@@ -35,12 +35,10 @@
             text-decoration: none;
             outline: none;
             overflow: hidden;
-            /* Uniform font size for all main labels */
             font-size: 3.5vw; 
         }
 
-        /* --- Individual Quadrant Styling --- */
-
+        /* --- Quadrant Styling --- */
         .games-main-btn {
             background: linear-gradient(135deg, #007cf0, #00dfd8);
             border-radius: 40px 15px 40px 15px;
@@ -49,8 +47,6 @@
         .games-req-btn {
             background: linear-gradient(225deg, #4facfe, #00f2fe);
             border-radius: 15px 40px 15px 40px;
-            /* Match the size of the others precisely */
-            font-size: 3.5vw; 
         }
 
         .proxies-btn {
@@ -63,7 +59,6 @@
             border-radius: 40px 15px 40px 15px;
         }
 
-        /* --- Hover & Polish --- */
         .nav-btn:hover {
             filter: brightness(1.2);
             transform: scale(1.02);
@@ -77,7 +72,6 @@
         }
 
         .sub-text {
-            /* Kept slightly smaller so it doesn't crowd the main title */
             font-size: 1.4vw;
             font-weight: 600;
             text-transform: none;
@@ -111,7 +105,7 @@
         function launch(name, url) {
             const newTab = window.open('about:blank', '_blank');
             if (!newTab) {
-                alert('Popup blocked! Please enable popups in your browser settings.');
+                alert('Popup blocked! Please allow popups.');
                 return;
             }
 
