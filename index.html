@@ -5,17 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Clever | Log in</title>
     
-    <link rel="icon" type="image/png" href="https://thegamewebsite.github.io/logo.png?v=5">
+    <link rel="icon" type="image/png" href="https://thegamewebsite.github.io/logo.png?v=7">
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body, html { height: 100%; width: 100%; background: #000; font-family: 'Inter', sans-serif; overflow: hidden; }
 
-        /* Custom Grid to match the drawing */
         .container {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            grid-template-rows: 1fr 1fr 2fr; /* Top two rows smaller, bottom row larger */
+            grid-template-rows: 1fr 1fr 2fr; 
             height: 100vh;
             width: 100vw;
             gap: 15px; 
@@ -41,9 +40,6 @@
             font-size: 2.5vw; 
         }
 
-        /* --- Specific Button Placements --- */
-        
-        /* Left Column, Top Row */
         .games-main-btn {
             grid-column: 1;
             grid-row: 1;
@@ -51,7 +47,6 @@
             border-radius: 40px 15px 10px 15px;
         }
 
-        /* Left Column, Middle Row */
         .games-req-btn {
             grid-column: 1;
             grid-row: 2;
@@ -59,7 +54,6 @@
             border-radius: 10px 15px 40px 15px;
         }
 
-        /* Right Column, Spans Top and Middle Row */
         .proxies-btn {
             grid-column: 2;
             grid-row: 1 / span 2;
@@ -68,7 +62,6 @@
             font-size: 3.5vw;
         }
 
-        /* Bottom Left */
         .tools-btn {
             grid-column: 1;
             grid-row: 3;
@@ -76,15 +69,40 @@
             border-radius: 40px 15px 40px 15px;
         }
 
-        /* Bottom Right */
-        .changelog-btn {
+        /* --- NEWS BLOCK (SINGLE TEXT AREA) --- */
+        .news-btn {
             grid-column: 2;
             grid-row: 3;
-            background: linear-gradient(135deg, #333, #555);
+            background: #111; 
+            border: 2px solid #333;
             border-radius: 15px 40px 15px 40px;
+            justify-content: flex-start;
+            padding: 25px;
+            cursor: default;
         }
 
-        .nav-btn:hover {
+        .news-header {
+            color: #4facfe;
+            font-size: 1.8vw;
+            margin-bottom: 15px;
+            text-align: left;
+            width: 100%;
+            font-weight: 900;
+            letter-spacing: 1px;
+        }
+
+        .news-text {
+            text-transform: none; 
+            font-weight: 400;
+            font-size: 1.3vw;
+            text-align: left;
+            width: 100%;
+            color: #ccc;
+            line-height: 1.4;
+            white-space: pre-wrap; /* Keeps your line breaks if you press enter */
+        }
+
+        .nav-btn:not(.news-btn):hover {
             filter: brightness(1.2);
             transform: scale(1.01);
             z-index: 10;
@@ -125,9 +143,12 @@
             <span>Movies and Tools</span>
         </button>
 
-        <button class="nav-btn changelog-btn" onclick="launch('Other Stuff', 'https://thegamewebsite.github.io/otherstuff/')">
-            <span>Other Stuff</span>
-        </button>
+        <div class="nav-btn news-btn">
+            <div class="news-header">NEWS</div>
+            <div class="news-text">
+1/12/26: I stopped being retarded and turned this into a news section
+</div>
+        </div>
     </div>
 
     <script>
