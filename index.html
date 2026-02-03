@@ -90,7 +90,7 @@
             letter-spacing: 1px;
             flex-shrink: 0;
             background: #111;
-            text-align: left; /* Header aligned left */
+            text-align: left;
             width: 100%;
         }
 
@@ -113,23 +113,13 @@
             color: #ccc;
             line-height: 1.1; 
             white-space: normal;
-            text-align: left; /* Text aligned left */
+            text-align: left;
         }
 
-        /* Dark Slim Scrollbar */
-        .news-scroll-area::-webkit-scrollbar {
-            width: 6px;
-        }
-        .news-scroll-area::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        .news-scroll-area::-webkit-scrollbar-thumb {
-            background: #333;
-            border-radius: 10px;
-        }
-        .news-scroll-area::-webkit-scrollbar-thumb:hover {
-            background: #4facfe;
-        }
+        .news-scroll-area::-webkit-scrollbar { width: 6px; }
+        .news-scroll-area::-webkit-scrollbar-track { background: transparent; }
+        .news-scroll-area::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+        .news-scroll-area::-webkit-scrollbar-thumb:hover { background: #4facfe; }
 
         .nav-btn:not(.news-btn):hover {
             filter: brightness(1.2);
@@ -137,11 +127,7 @@
             z-index: 10;
         }
 
-        span {
-            filter: drop-shadow(0 0 10px rgba(0,0,0,0.5));
-            pointer-events: none;
-            padding: 10px;
-        }
+        span { filter: drop-shadow(0 0 10px rgba(0,0,0,0.5)); pointer-events: none; padding: 10px; }
 
         .sub-text {
             font-size: 1.1vw;
@@ -156,19 +142,19 @@
 <body>
 
     <div class="container">
-        <button class="nav-btn games-main-btn" onclick="launch('Main Games', 'https://schoolissuperfun.github.io/games/')">
+        <button class="nav-btn games-main-btn" onclick="launch('Amplify', 'https://schoolissuperfun.github.io/games/', 'https://schoolissuperfun.github.io/realhome/amplify.png')">
             <span>Main Games</span>
         </button>
 
-        <button class="nav-btn games-req-btn" onclick="launch('Requested Games', 'https://schoolissuperfun.github.io/requested-games/')">
+        <button class="nav-btn games-req-btn" onclick="launch('Canva', 'https://schoolissuperfun.github.io/requested-games/', 'https://schoolissuperfun.github.io/realhome/canva.png')">
             <span>Requested Games<br><span class="sub-text">Games In News, Game Websites</span></span>
         </button>
 
-        <button class="nav-btn proxies-btn" onclick="launch('Proxies', 'https://schoolissuperfun.github.io/proxies')">
+        <button class="nav-btn proxies-btn" onclick="launch('Grades', 'https://schoolissuperfun.github.io/proxies', 'https://schoolissuperfun.github.io/realhome/powerschool.png')">
             <span>Proxies</span>
         </button>
 
-        <button class="nav-btn tools-btn" onclick="launch('Movies & Tools', 'https://schoolissuperfun.github.io/movies-tools/')">
+        <button class="nav-btn tools-btn" onclick="launch('Formative', 'https://schoolissuperfun.github.io/movies-tools/', 'https://schoolissuperfun.github.io/realhome/formative.png')">
             <span>Movies and Tools</span>
         </button>
 
@@ -200,7 +186,7 @@
     </div>
 
     <script>
-        function launch(name, url) {
+        function launch(name, url, favicon) {
             const newTab = window.open('about:blank', '_blank');
             if (!newTab) {
                 alert('Popup blocked!');
@@ -211,8 +197,8 @@
                 <!DOCTYPE html>
                 <html>
                 <head>
-                    <title>Clever | Log in</title>
-                    <link rel="icon" type="image/png" href="https://schoolissuperfun.github.io/logo.png">
+                    <title>${name}</title>
+                    <link rel="icon" type="image/png" href="${favicon}">
                     <style>
                         body, html { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; background: #000; }
                         iframe { border: none; width: 100%; height: 100%; }
