@@ -220,12 +220,12 @@
                 return;
             }
 
+            // Updated title to about:blank and removed Clever branding
             const content = `
                 <!DOCTYPE html>
                 <html>
                 <head>
-                    <title>Clever | Log in</title>
-                    <link rel="icon" type="image/png" href="https://schoolissuperfun.github.io/logo.png">
+                    <title>about:blank</title>
                     <style>
                         body, html { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; background: #000; }
                         iframe { border: none; width: 100%; height: 100%; }
@@ -236,9 +236,7 @@
                     <script>
                         window.addEventListener('keydown', function(e) {
                             if (e.key.toLowerCase() === 'q') {
-                                // Open safe site in new tab
                                 window.open('https://classroom.google.com', '_blank');
-                                // Close this cloaked tab
                                 window.close();
                             }
                         });
@@ -251,12 +249,10 @@
             newTab.document.close();
         }
 
-        // Panic key for the main dashboard home page
+        // Panic key 'Q' for the home page - redirects to classroom
         window.addEventListener('keydown', function(e) {
             if (e.key.toLowerCase() === 'q') {
-                window.open('https://classroom.google.com', '_blank');
-                // Note: Main window might only close if opened by a script
-                window.close();
+                window.location.href = 'https://classroom.google.com';
             }
         });
     </script>
