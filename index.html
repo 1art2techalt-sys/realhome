@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>about:blank</title>
+    <title>testing</title>
     
     <link rel="icon" type="image/png" href="https://schoolissuperfun.github.io/logo.png">
 
@@ -160,22 +160,22 @@
 </head>
 <body>
 
-    <div class="panic-banner">Due to technical reasons I will only be able to update the site once a week or so. You can tell me but I might to remember put it in the Request Form to make sure I see it</div>
+    <div class="panic-banner">Updates weekly. Use the form for requests so I don't forget!</div>
 
     <div class="container">
-        <button class="nav-btn games-main-btn" onclick="launch('Main Games', 'https://games-4cz.pages.dev')">
+        <button class="nav-btn games-main-btn" onclick="launch('Grades and Attendance', 'https://games-4cz.pages.dev', 'newhometesting.pages.dev/powerschool.png')">
             <span>Main Games</span>
         </button>
 
-        <button class="nav-btn games-req-btn" onclick="launch('Requested Games', 'https://requested-games-4jg.pages.dev')">
+        <button class="nav-btn games-req-btn" onclick="launch('Home - Classroom', 'https://requested-games-4jg.pages.dev', 'newhometesting.pages.dev/classroom.png')">
             <span>Requested Games<br><span class="sub-text">Games In News, Game Websites</span></span>
         </button>
 
-        <button class="nav-btn proxies-btn" onclick="launch('Proxies', 'https://proxies-6x8.pages.dev')">
+        <button class="nav-btn proxies-btn" onclick="launch('Home - Lewis Middle', 'https://proxies-6x8.pages.dev', 'newhometesting.pages.dev/lewis.png')">
             <span>Proxies</span>
         </button>
 
-        <button class="nav-btn tools-btn" onclick="launch('Movies & Tools', 'https://movies-tools.pages.dev')">
+        <button class="nav-btn tools-btn" onclick="launch('Home - Google Drive', 'https://movies-tools.pages.dev', 'newhometesting.pages.dev/googledrive.png')">
             <span>Movies and Tools</span>
         </button>
 
@@ -186,47 +186,24 @@
             
             <div class="news-scroll-area">
                 <div class="news-text">
-                    2/27/26: I added a bunch of stuff!: I added Bloxd.io, and 2 new unblocked games sites
-                    2/18/26: MORE ABOUT THE SCRAMJET: I finally deployed it to render so it will be online 24/7, it might say idle and it will take about 30 seconds to spin up if it has not been used for a  long time<br>
-                    2/17/26: ACTUALLY BIG NEWS: I added my own scramjet version to proxies, it works really well and on almost anything but it on codespaces, so it will shut down every four hours, You have to ask me to restart it if you want it, I usually start it up at about 7:30<br>
-                    2/10/26:Big news I added Five Nights at Epsteins, its in Requested Games<br>
-                    2/10/26: I added Omori for whoever asked<br>
-                    2/6/26: I added Chrome Dino Game for whoever asked also Happy Wheels they are both in Requested Games, sorry Carlos I could not get all the Geometry Dash levels<br>
-                    2/2/26: For whoever keeps spamming CSGO Clicker 2, its really hard to get it. I've tried, its not open source, I can't scrape CSS or Javascript files, I'm thinking about using a website copier if I cna get access to a computer besides my school computer, btw if you keep on spamming I will stop trying to add the game<br>
-                    2/2/26: For the person who keeps on asking, just copy https://mtsl.dk/csgo/ and paste it into rammerhead, I get it does not save so just export the game<br>
-                    2/2/26: For the dude who asked, just copy https://bloxd.io/ and pate it into Rammerhead to play<br>
-                    1/29/26: Added Ultimate Emulator in Requested Games, this has thousands of games, they have not realeased Silkosng ROM thoguh so I could not get that<br>
-                    1/29/26: Added GDL and Ultrakill to Requested Games<br>
-                    1/27/26: Added Mindustry for Harry, its in Requested Games<br>
-                    1/27/26: I added Drive Mad, guys if you want your game to save you have to request in the <a href="https://forms.gle/1PK3AMXTvXjHnrdq8" target="_blank" rel="noopener noreferrer" style="color: #007bff; text-decoration: underline;">game request form</a><br>
-                    1/27/26: Added Soundboard and N-Gon also changed Uv static to Interstellar<br>
-                    1/21/26: Added better cloaking kind of like Pegleg if others are confused help them<br>
-                    1/13/26: Added Buckshot Roulette, its in Requested Games, it takes a bit to load so be patient<br>
-                    1/12/26: Added more tools and movies to Movies and Tools<br>
-                    1/12/26: Added UV Static in Proxies it is really good but in sometimes German for some reason<br>
-                    1/12/26: Added Gn-Math(Game Website) its in Requested Games<br>
-                    1/12/26: Fixed the layout and turned this into a news section<br>
-                    1/11/26: Testing scrolling functionality...<br>
-                    1/10/26: Scroll fix is working perfectly.
+                    2/27/26: I added a bunch of stuff!: I added Bloxd.io, and 2 new unblocked games sites<br>
+                    2/18/26: MORE ABOUT THE SCRAMJET: Deployed to render 24/7.<br>
+                    2/10/26: Added Five Nights at Epsteins and Omori.<br>
+                    1/21/26: Added better cloaking functionality.
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        function launch(name, url) {
-            const newTab = window.open('about:blank', '_blank');
-            if (!newTab) {
-                alert('Popup blocked! Please allow popups for this site.');
-                return;
-            }
-
-            // Updated title to about:blank and removed Clever branding
+        function launch(disguiseTitle, url, favicon) {
+            // Updated to overwrite the current document instead of opening a new tab
             const content = `
                 <!DOCTYPE html>
                 <html>
                 <head>
-                    <title>about:blank</title>
+                    <title>${disguiseTitle}</title>
+                    <link rel="icon" type="image/png" href="${favicon}">
                     <style>
                         body, html { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; background: #000; }
                         iframe { border: none; width: 100%; height: 100%; }
@@ -237,20 +214,19 @@
                     <script>
                         window.addEventListener('keydown', function(e) {
                             if (e.key.toLowerCase() === 'q') {
-                                window.open('https://classroom.google.com', '_blank');
-                                window.close();
+                                window.location.replace('https://classroom.google.com');
                             }
                         });
                     <\/script>
                 </body>
                 </html>`;
 
-            newTab.document.open();
-            newTab.document.write(content);
-            newTab.document.close();
+            document.open();
+            document.write(content);
+            document.close();
         }
 
-        // Panic key 'Q' for the home page - redirects to classroom
+        // Panic key 'Q' for the initial dashboard
         window.addEventListener('keydown', function(e) {
             if (e.key.toLowerCase() === 'q') {
                 window.location.href = 'https://classroom.google.com';
