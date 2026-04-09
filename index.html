@@ -4,7 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>testing</title>
+    
     <link rel="icon" type="image/png" href="https://schoolissuperfun.github.io/logo.png">
+
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body, html { height: 100%; width: 100%; background: #000; font-family: 'Inter', sans-serif; overflow: hidden; }
@@ -12,49 +14,97 @@
         /* --- OVERLAY --- */
         #gameOverlay {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: #000; display: none; z-index: 10000;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: #000;
+            display: none; 
+            z-index: 10000;
         }
 
-        /* The Close Button - Only shows when on the Grid */
         #overlayCloseBtn {
             position: fixed;
-            top: 10px; left: 10px; z-index: 10001;
+            top: 10px;
+            left: 10px;
+            z-index: 10001;
             background: rgba(255, 255, 255, 0.2);
-            color: #fff; border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 8px 15px; border-radius: 5px; cursor: pointer;
-            font-size: 12px; font-weight: bold; text-transform: uppercase;
-            backdrop-filter: blur(5px); display: none; /* Hidden by default */
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            backdrop-filter: blur(5px);
+            display: none; /* Controlled by JS */
         }
 
         #gameFrame { width: 100%; height: 100%; border: none; }
 
-        /* --- UI --- */
         .panic-banner {
-            position: fixed; top: 0; left: 0; width: 100%;
-            background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(5px);
-            color: rgba(255, 255, 255, 0.6); text-align: center; padding: 5px 0;
-            font-size: 0.9vw; font-weight: 600; z-index: 999; text-transform: uppercase;
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            color: rgba(255, 255, 255, 0.6);
+            text-align: center;
+            padding: 5px 0;
+            font-size: 0.9vw;
+            font-weight: 600;
+            z-index: 9999;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            pointer-events: none;
         }
 
         .container {
-            display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr 2fr; 
-            height: 100vh; width: 100vw; gap: 15px; padding: 40px 15px 15px 15px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr 2fr; 
+            height: 100vh;
+            width: 100vw;
+            gap: 15px; 
+            padding: 40px 15px 15px 15px;
         }
 
         .nav-btn {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            font-weight: 900; text-transform: uppercase; color: white; border: none; cursor: pointer;
-            transition: 0.3s; font-size: 2.5vw; text-decoration: none;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-weight: 900;
+            text-transform: uppercase;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s ease, filter 0.3s ease;
+            text-decoration: none;
+            outline: none;
+            overflow: hidden;
+            font-size: 2.5vw; 
         }
 
-        .games-main-btn { background: linear-gradient(135deg, #007cf0, #00dfd8); border-radius: 40px 15px 10px 15px; }
-        .games-req-btn { background: linear-gradient(225deg, #4facfe, #00f2fe); border-radius: 10px 15px 40px 15px; }
+        .games-main-btn { grid-column: 1; grid-row: 1; background: linear-gradient(135deg, #007cf0, #00dfd8); border-radius: 40px 15px 10px 15px; }
+        .games-req-btn { grid-column: 1; grid-row: 2; background: linear-gradient(225deg, #4facfe, #00f2fe); border-radius: 10px 15px 40px 15px; }
         .proxies-btn { grid-column: 2; grid-row: 1 / span 2; background: linear-gradient(225deg, #ff4b2b, #ff416c); border-radius: 15px 40px 15px 40px; font-size: 3.5vw; }
-        .tools-btn { background: linear-gradient(135deg, #7928ca, #ff0080); border-radius: 40px 15px 40px 15px; }
-        .news-btn { background: #111; border: 2px solid #333; border-radius: 15px 40px 15px 40px; padding: 20px; }
+        .tools-btn { grid-column: 1; grid-row: 3; background: linear-gradient(135deg, #7928ca, #ff0080); border-radius: 40px 15px 40px 15px; }
 
-        .nav-btn:hover { filter: brightness(1.2); transform: scale(1.01); }
+        .news-btn {
+            grid-column: 2; grid-row: 3;
+            background: #111; border: 2px solid #333;
+            border-radius: 15px 40px 15px 40px; padding: 20px;
+            cursor: default; display: flex; flex-direction: column; overflow: hidden;
+        }
+
+        .news-header { color: #4facfe; font-size: 1.3vw; margin-bottom: 8px; font-weight: 900; }
+        .news-header a { color: #ff416c; text-decoration: underline; cursor: pointer; }
+        .news-scroll-area { overflow-y: auto; flex-grow: 1; width: 100%; }
+        .news-text { text-transform: none; font-weight: 400; font-size: 1.2vw; color: #ccc; line-height: 1.1; white-space: normal; text-align: left; }
+
+        .nav-btn:not(.news-btn):hover { filter: brightness(1.2); transform: scale(1.01); z-index: 10; }
+        span { filter: drop-shadow(0 0 10px rgba(0,0,0,0.5)); pointer-events: none; padding: 10px; }
         .sub-text { font-size: 1.1vw; font-weight: 600; text-transform: none; display: block; margin-top: 5px; opacity: 0.8; }
     </style>
 </head>
@@ -68,24 +118,31 @@
     <div class="panic-banner">Updates weekly. Use the form for requests!</div>
 
     <div class="container">
-        <button class="nav-btn games-main-btn" onclick="launch('Grades', 'https://games-4cz.pages.dev', '', false)">
+        <button class="nav-btn games-main-btn" onclick="launch('Grades', 'https://games-4cz.pages.dev', 'https://realhome-74e.pages.dev/powerschool.png', false)">
             <span>Main Games</span>
         </button>
 
-        <button class="nav-btn games-req-btn" onclick="launch('Requested', 'https://requested-games-4jg.pages.dev', '', true)">
+        <button class="nav-btn games-req-btn" onclick="launch('Classroom', 'https://requested-games-4jg.pages.dev', 'https://newhometesting.pages.dev/classroom.png', true)">
             <span>Requested Games<br><span class="sub-text">Games In News, Game Websites</span></span>
         </button>
 
-        <button class="nav-btn proxies-btn" onclick="launch('Proxies', 'https://proxies-6x8.pages.dev', '', false)">
+        <button class="nav-btn proxies-btn" onclick="launch('Lewis Middle', 'https://proxies-6x8.pages.dev', 'https://newhometesting.pages.dev/lewis.png', false)">
             <span>Proxies</span>
         </button>
 
-        <button class="nav-btn tools-btn" onclick="launch('Tools', 'https://movies-tools.pages.dev', '', false)">
+        <button class="nav-btn tools-btn" onclick="launch('Google Drive', 'https://movies-tools.pages.dev', 'https://newhometesting.pages.dev/googledrive.png', false)">
             <span>Movies and Tools</span>
         </button>
 
         <div class="nav-btn news-btn">
-            <div style="color: #4facfe; font-size: 1.3vw; font-weight: 900;">NEWS</div>
+            <div class="news-header">NEWS (<a href="https://forms.gle/1PK3AMXTvXjHnrdq8" target="_blank">FORM</a>)</div>
+            <div class="news-scroll-area">
+                <div class="news-text">
+                    3/27/26: BIG NEWS: I am looking for helpers!<br><br>
+                    3/27/26: Added UBG sites and fixed Scramjet.<br><br>
+                    3/16/26: Fixed overlay navigation.
+                </div>
+            </div>
         </div>
     </div>
 
@@ -101,8 +158,7 @@
             frame.src = url;
             overlay.style.display = 'block';
 
-            // IF showBackButton is true (The Grid), show the button.
-            // IF false (A specific game), hide it.
+            // Show button ONLY if explicitly requested (for the Grid)
             btn.style.display = showBackButton ? 'block' : 'none';
         }
 
