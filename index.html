@@ -11,17 +11,39 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body, html { height: 100%; width: 100%; background: #000; font-family: 'Inter', sans-serif; overflow: hidden; }
 
-        /* --- GAME OVERLAY (The Secret Sauce) --- */
+        /* --- STABLE OVERLAY --- */
         #gameOverlay {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
             background: #000;
-            display: none; /* Hidden by default */
+            display: none; 
             z-index: 10000;
         }
+
+        /* The Close Button - Keeps navigation working forever */
+        .close-btn {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 10001;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            backdrop-filter: blur(5px);
+            transition: 0.2s;
+        }
+        .close-btn:hover { background: rgba(255, 255, 255, 0.4); }
+
         #gameFrame { width: 100%; height: 100%; border: none; }
 
+        /* --- UI ELEMENTS --- */
         .panic-banner {
             position: fixed;
             top: 0; left: 0; width: 100%;
@@ -79,7 +101,7 @@
             cursor: default; display: flex; flex-direction: column; overflow: hidden;
         }
 
-        .news-header { color: #4facfe; font-size: 1.3vw; margin-bottom: 8px; font-weight: 900; background: #111; }
+        .news-header { color: #4facfe; font-size: 1.3vw; margin-bottom: 8px; font-weight: 900; }
         .news-header a { color: #ff416c; text-decoration: underline; cursor: pointer; }
         .news-scroll-area { overflow-y: auto; flex-grow: 1; width: 100%; }
         .news-text { text-transform: none; font-weight: 400; font-size: 1.2vw; color: #ccc; line-height: 1.1; }
@@ -92,6 +114,7 @@
 <body>
 
     <div id="gameOverlay">
+        <button class="close-btn" onclick="closeGame()">Back to Home</button>
         <iframe id="gameFrame" src=""></iframe>
     </div>
 
@@ -102,48 +125,48 @@
             <span>Main Games</span>
         </button>
 
-        <button class="nav-btn games-req-btn" onclick="launch('Classroom', 'https://requested-games-4jg.pages.dev', 'newhometesting.pages.dev/classroom.png', false)">
+        <button class="nav-btn games-req-btn" onclick="launch('Classroom', 'https://requested-games-4jg.pages.dev', 'https://newhometesting.pages.dev/classroom.png', false)">
             <span>Requested Games<br><span class="sub-text">Games In News, Game Websites</span></span>
         </button>
 
-        <button class="nav-btn proxies-btn" onclick="launch('Lewis Middle', 'https://proxies-6x8.pages.dev', 'newhometesting.pages.dev/lewis.png', false)">
+        <button class="nav-btn proxies-btn" onclick="launch('Lewis Middle', 'https://proxies-6x8.pages.dev', 'https://newhometesting.pages.dev/lewis.png', false)">
             <span>Proxies</span>
         </button>
 
-        <button class="nav-btn tools-btn" onclick="launch('Google Drive', 'https://movies-tools.pages.dev', 'newhometesting.pages.dev/googledrive.png', false)">
+        <button class="nav-btn tools-btn" onclick="launch('Google Drive', 'https://movies-tools.pages.dev', 'https://newhometesting.pages.dev/googledrive.png', false)">
             <span>Movies and Tools</span>
         </button>
 
         <div class="nav-btn news-btn">
             <div class="news-header">
-                NEWS (<a href="https://forms.gle/1PK3AMXTvXjHnrdq8" target="_blank">FORM</a>) | 
-                <a href="javascript:void(0)" onclick="launch('Credits', 'https://credits-7oi.pages.dev/', 'https://ssl.gstatic.com/docs/doclist/images/mediatype/icon_1_document_x16.png', true)" style="color: #7928ca;">CREDITS</a>
+                NEWS (<a href="https://forms.gle/1PK3AMXTvXjHnrdq8" target="_blank">FORM</a>)
             </div>
             <div class="news-scroll-area">
                 <div class="news-text">
-                    3/27/26: BIG NEWS: I am looking for helpers! <br><br>
+                    3/27/26: Navigation system overhauled for 100% stability. <br><br>
                     3/27/26: Added UBG sites and fixed Scramjet.<br><br>
-                    3/16/26: Improved cloaking logic. Navigation fixed.
+                    3/16/26: Use the "Back to Home" button inside the game window to exit safely.
                 </div>
             </div>
         </div>
     </div>
 
     <script>
+        const originalTitle = document.title;
+        const originalFavicon = "https://schoolissuperfun.github.io/logo.png";
+
         function launch(disguiseTitle, url, favicon, inNewTab) {
             if (inNewTab) {
-                // Open in a new tab if specifically requested (like Credits)
                 const newWin = window.open('about:blank', '_blank');
                 if (newWin) {
                     const content = `<html><head><title>${disguiseTitle}</title><link rel="icon" href="${favicon}"><style>body,html{margin:0;padding:0;height:100%;overflow:hidden;}iframe{border:none;width:100%;height:100%;}</style></head><body><iframe src="${url}"></iframe></body></html>`;
                     newWin.document.write(content);
+                    newWin.document.close();
                 }
             } else {
-                // INTERNAL LAUNCH (The Fix)
+                // INTERNAL LAUNCH
                 document.title = disguiseTitle;
-                // Update favicon if you have a helper function, or just:
-                let link = document.querySelector("link[rel~='icon']");
-                if (link) link.href = favicon;
+                updateFavicon(favicon);
 
                 const overlay = document.getElementById('gameOverlay');
                 const frame = document.getElementById('gameFrame');
@@ -151,22 +174,35 @@
                 frame.src = url;
                 overlay.style.display = 'block';
 
-                // Add a history entry so the Back button works
-                window.history.pushState({viewingGame: true}, disguiseTitle, window.location.href);
+                // We push a state just for the browser history, but we'll use our own button to close
+                window.history.pushState({view: 'game'}, disguiseTitle);
             }
         }
 
-        // Handle the Back Button
-        window.onpopstate = function(event) {
+        function closeGame() {
             const overlay = document.getElementById('gameOverlay');
             const frame = document.getElementById('gameFrame');
             
-            // Hide the game and reset the page
             overlay.style.display = 'none';
-            frame.src = ""; 
-            document.title = "testing"; // Back to original title
+            frame.src = ""; // Stop the game/site from running in background
+            
+            document.title = originalTitle;
+            updateFavicon(originalFavicon);
+        }
+
+        function updateFavicon(url) {
             let link = document.querySelector("link[rel~='icon']");
-            if (link) link.href = "https://schoolissuperfun.github.io/logo.png";
+            if (!link) {
+                link = document.createElement('link');
+                link.rel = 'icon';
+                document.head.appendChild(link);
+            }
+            link.href = url;
+        }
+
+        // Handle browser back button manually
+        window.onpopstate = function() {
+            closeGame();
         };
 
         // Panic Key (Q)
