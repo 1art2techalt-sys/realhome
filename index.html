@@ -21,7 +21,7 @@
             z-index: 10000;
         }
 
-        /* The Close Button - Keeps navigation working forever */
+        /* The Close Button - Now directs back to Requested Games if applicable */
         .close-btn {
             position: fixed;
             top: 10px;
@@ -114,7 +114,7 @@
 <body>
 
     <div id="gameOverlay">
-        <button class="close-btn" onclick="closeGame()">Back to Home</button>
+        <button id="overlayCloseBtn" class="close-btn" onclick="closeGame()">Back to Home</button>
         <iframe id="gameFrame" src=""></iframe>
     </div>
 
@@ -138,14 +138,11 @@
         </button>
 
         <div class="nav-btn news-btn">
-            <div class="news-header">
-                NEWS (<a href="https://forms.gle/1PK3AMXTvXjHnrdq8" target="_blank">FORM</a>)
-            </div>
+            <div class="news-header">NEWS (<a href="https://forms.gle/1PK3AMXTvXjHnrdq8" target="_blank">FORM</a>)</div>
             <div class="news-scroll-area">
                 <div class="news-text">
-                    3/27/26: Navigation system overhauled for 100% stability. <br><br>
-                    3/27/26: Added UBG sites and fixed Scramjet.<br><br>
-                    3/16/26: Use the "Back to Home" button inside the game window to exit safely.
+                    3/27/26: Navigation overhauled. Closing a game now returns you to the grid!<br><br>
+                    3/27/26: Added UBG sites and fixed Scramjet.
                 </div>
             </div>
         </div>
@@ -154,6 +151,10 @@
     <script>
         const originalTitle = document.title;
         const originalFavicon = "https://schoolissuperfun.github.io/logo.png";
+        
+        // This tracks if we are inside a "Sub-Page" (like Requested Games)
+        let isInsideSubPage = false;
+        const requestedGamesUrl = 'https://requested-games-4jg.pages.dev';
 
         function launch(disguiseTitle, url, favicon, inNewTab) {
             if (inNewTab) {
@@ -164,17 +165,25 @@
                     newWin.document.close();
                 }
             } else {
-                // INTERNAL LAUNCH
                 document.title = disguiseTitle;
                 updateFavicon(favicon);
 
                 const overlay = document.getElementById('gameOverlay');
                 const frame = document.getElementById('gameFrame');
+                const closeBtn = document.getElementById('overlayCloseBtn');
                 
+                // Logic: If the URL we are opening IS NOT the requested games grid, 
+                // but the grid IS currently open in the background, change the button text
+                if (url !== requestedGamesUrl && frame.src.includes('requested-games')) {
+                    isInsideSubPage = true;
+                    closeBtn.innerText = "Back to Requested Games";
+                } else {
+                    isInsideSubPage = false;
+                    closeBtn.innerText = "Back to Home";
+                }
+
                 frame.src = url;
                 overlay.style.display = 'block';
-
-                // We push a state just for the browser history, but we'll use our own button to close
                 window.history.pushState({view: 'game'}, disguiseTitle);
             }
         }
@@ -182,12 +191,18 @@
         function closeGame() {
             const overlay = document.getElementById('gameOverlay');
             const frame = document.getElementById('gameFrame');
-            
-            overlay.style.display = 'none';
-            frame.src = ""; // Stop the game/site from running in background
-            
-            document.title = originalTitle;
-            updateFavicon(originalFavicon);
+            const closeBtn = document.getElementById('overlayCloseBtn');
+
+            if (isInsideSubPage) {
+                // Return to Requested Games Grid
+                launch('Classroom', requestedGamesUrl, 'https://newhometesting.pages.dev/classroom.png', false);
+            } else {
+                // Return to Main Menu
+                overlay.style.display = 'none';
+                frame.src = ""; 
+                document.title = originalTitle;
+                updateFavicon(originalFavicon);
+            }
         }
 
         function updateFavicon(url) {
@@ -200,12 +215,8 @@
             link.href = url;
         }
 
-        // Handle browser back button manually
-        window.onpopstate = function() {
-            closeGame();
-        };
+        window.onpopstate = function() { closeGame(); };
 
-        // Panic Key (Q)
         window.addEventListener('keydown', function(e) {
             if (e.key.toLowerCase() === 'q') {
                 window.location.href = 'https://classroom.google.com';
