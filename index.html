@@ -3,127 +3,120 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Requested Games</title>
+    <title>testing</title>
+    <link rel="icon" type="image/png" href="https://schoolissuperfun.github.io/logo.png">
     <style>
-        /* --- Setup --- */
-        html, body {
-            margin: 0; padding: 0;
-            font-family: 'Inter', sans-serif;
-            background: #000; color: white;
-            display: flex; flex-direction: column; align-items: center;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body, html { height: 100%; width: 100%; background: #000; font-family: 'Inter', sans-serif; overflow: hidden; }
+
+        /* --- OVERLAY --- */
+        #gameOverlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; display: none; z-index: 10000;
         }
 
-        /* --- Header --- */
-        .main-header {
-            font-size: 42px; font-weight: 900; letter-spacing: 2px;
-            margin: 40px 0 10px 0; text-transform: uppercase;
-            background: linear-gradient(#4facfe, #00f2fe);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        /* The Close Button - Only shows when on the Grid */
+        #overlayCloseBtn {
+            position: fixed;
+            top: 10px; left: 10px; z-index: 10001;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff; border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 15px; border-radius: 5px; cursor: pointer;
+            font-size: 12px; font-weight: bold; text-transform: uppercase;
+            backdrop-filter: blur(5px); display: none; /* Hidden by default */
         }
 
-        .search-container { width: 90%; max-width: 600px; margin-bottom: 40px; }
+        #gameFrame { width: 100%; height: 100%; border: none; }
 
-        #gameSearch {
-            width: 100%; padding: 15px 25px; border-radius: 30px;
-            border: 2px solid rgba(79, 172, 254, 0.3);
-            background: rgba(255, 255, 255, 0.05); color: white;
-            font-size: 16px; outline: none; text-align: center;
+        /* --- UI --- */
+        .panic-banner {
+            position: fixed; top: 0; left: 0; width: 100%;
+            background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(5px);
+            color: rgba(255, 255, 255, 0.6); text-align: center; padding: 5px 0;
+            font-size: 0.9vw; font-weight: 600; z-index: 999; text-transform: uppercase;
         }
 
-        /* --- Grid --- */
-        .request-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 20px; width: 90%; max-width: 1000px; padding-bottom: 50px;
+        .container {
+            display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr 2fr; 
+            height: 100vh; width: 100vw; gap: 15px; padding: 40px 15px 15px 15px;
         }
 
-        .card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(79, 172, 254, 0.3);
-            border-radius: 12px; padding: 25px; text-align: center;
-            display: flex; flex-direction: column; justify-content: center; min-height: 140px;
+        .nav-btn {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            font-weight: 900; text-transform: uppercase; color: white; border: none; cursor: pointer;
+            transition: 0.3s; font-size: 2.5vw; text-decoration: none;
         }
 
-        .hidden { display: none !important; }
+        .games-main-btn { background: linear-gradient(135deg, #007cf0, #00dfd8); border-radius: 40px 15px 10px 15px; }
+        .games-req-btn { background: linear-gradient(225deg, #4facfe, #00f2fe); border-radius: 10px 15px 40px 15px; }
+        .proxies-btn { grid-column: 2; grid-row: 1 / span 2; background: linear-gradient(225deg, #ff4b2b, #ff416c); border-radius: 15px 40px 15px 40px; font-size: 3.5vw; }
+        .tools-btn { background: linear-gradient(135deg, #7928ca, #ff0080); border-radius: 40px 15px 40px 15px; }
+        .news-btn { background: #111; border: 2px solid #333; border-radius: 15px 40px 15px 40px; padding: 20px; }
 
-        .card h3 { margin: 0 0 15px 0; font-size: 18px; text-transform: uppercase; }
-
-        /* --- Buttons --- */
-        .btn {
-            background: #4facfe; color: #000; border: none;
-            padding: 12px 20px; border-radius: 8px; font-weight: 800;
-            cursor: pointer; text-transform: uppercase; font-size: 13px;
-            text-decoration: none; display: inline-block;
-        }
-
-        .btn:hover { background: #00f2fe; transform: scale(1.05); }
-
-        .form-card { background: rgba(79, 172, 254, 0.15); border: 2px dashed #4facfe; }
+        .nav-btn:hover { filter: brightness(1.2); transform: scale(1.01); }
+        .sub-text { font-size: 1.1vw; font-weight: 600; text-transform: none; display: block; margin-top: 5px; opacity: 0.8; }
     </style>
 </head>
 <body>
 
-    <h1 class="main-header">Requested Games</h1>
-
-    <div class="search-container">
-        <input type="text" id="gameSearch" placeholder="Search for a game..." onkeyup="filterGames()">
+    <div id="gameOverlay">
+        <button id="overlayCloseBtn" onclick="closeOverlay()">Back to Home</button>
+        <iframe id="gameFrame" src=""></iframe>
     </div>
 
-    <div class="request-grid" id="gameGrid">
-        <div class="card form-card">
-            <h3>Request a Game</h3>
-            <a href="https://forms.gle/xhWTy62fK1YqxNQA6" target="_blank" class="btn">Open Form</a>
-        </div> 
+    <div class="panic-banner">Updates weekly. Use the form for requests!</div>
 
-        <div class="card">
-            <h3>Bloxd.io</h3>
-            <button class="btn" onclick="window.parent.launch('Bloxd', 'https://geometry.com.de/', 'https://geometry.com.de/favicon.ico', false)">Play Now</button>
-        </div>
+    <div class="container">
+        <button class="nav-btn games-main-btn" onclick="launch('Grades', 'https://games-4cz.pages.dev', '', false)">
+            <span>Main Games</span>
+        </button>
 
-        <div class="card">
-            <h3>Geometry Dash</h3>
-            <button class="btn" onclick="window.parent.launch('Geometry Dash', 'https://gdl-dne.pages.dev', '', false)">Play Now</button>
-        </div>
+        <button class="nav-btn games-req-btn" onclick="launch('Requested', 'https://requested-games-4jg.pages.dev', '', true)">
+            <span>Requested Games<br><span class="sub-text">Games In News, Game Websites</span></span>
+        </button>
 
-        <div class="card">
-            <h3>UBG 1</h3>
-            <button class="btn" onclick="window.parent.launch('UBG 1', 'https://ubg01.gitlab.io/', '', false)">Play Now</button>
-        </div>
+        <button class="nav-btn proxies-btn" onclick="launch('Proxies', 'https://proxies-6x8.pages.dev', '', false)">
+            <span>Proxies</span>
+        </button>
 
-        <div class="card">
-            <h3>Five Nights at Epstein's</h3>
-            <button class="btn" onclick="window.parent.launch('FNAE', 'https://fivenightsatepsteins-f19.pages.dev', '', false)">Play Now</button>
-        </div>
+        <button class="nav-btn tools-btn" onclick="launch('Tools', 'https://movies-tools.pages.dev', '', false)">
+            <span>Movies and Tools</span>
+        </button>
 
-        <div class="card">
-            <h3>Happy Wheels</h3>
-            <button class="btn" onclick="window.parent.launch('Happy Wheels', 'https://happywheels-38v.pages.dev', '', false)">Play Now</button>
-        </div>
-
-        <div class="card">
-            <h3>Buckshot Roulette</h3>
-            <button class="btn" onclick="window.parent.launch('Buckshot', 'https://buckshot-roulette-6gv.pages.dev', '', false)">Play Now</button>
-        </div>
-
-        <div class="card">
-            <h3>Pokerogue</h3>
-            <button class="btn" onclick="window.parent.launch('Pokerogue', 'https://pokerogue-er3.pages.dev', '', false)">Play Now</button>
+        <div class="nav-btn news-btn">
+            <div style="color: #4facfe; font-size: 1.3vw; font-weight: 900;">NEWS</div>
         </div>
     </div>
 
     <script>
-        function filterGames() {
-            let input = document.getElementById('gameSearch').value.toLowerCase();
-            let cards = document.getElementsByClassName('card');
-            for (let i = 0; i < cards.length; i++) {
-                let title = cards[i].getElementsByTagName('h3')[0].innerText.toLowerCase();
-                if (title.includes(input)) {
-                    cards[i].classList.remove('hidden');
-                } else {
-                    cards[i].classList.add('hidden');
-                }
-            }
+        const originalTitle = document.title;
+
+        function launch(title, url, favicon, showBackButton) {
+            const overlay = document.getElementById('gameOverlay');
+            const frame = document.getElementById('gameFrame');
+            const btn = document.getElementById('overlayCloseBtn');
+
+            document.title = title;
+            frame.src = url;
+            overlay.style.display = 'block';
+
+            // IF showBackButton is true (The Grid), show the button.
+            // IF false (A specific game), hide it.
+            btn.style.display = showBackButton ? 'block' : 'none';
         }
+
+        function closeOverlay() {
+            const overlay = document.getElementById('gameOverlay');
+            const frame = document.getElementById('gameFrame');
+            overlay.style.display = 'none';
+            frame.src = "";
+            document.title = originalTitle;
+        }
+
+        window.addEventListener('keydown', e => {
+            if (e.key.toLowerCase() === 'q') window.location.href = 'https://classroom.google.com';
+        });
     </script>
 </body>
 </html>
